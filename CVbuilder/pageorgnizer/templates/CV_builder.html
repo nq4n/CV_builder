@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}Create Your CV{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Create Your CV</h1>
+
+    <!-- CV Form -->
+    <form method="POST" enctype="multipart/form-data"  action='save_cv'>
+        {% csrf_token %}
+        
+        <!-- Personal Information Section -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Personal Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone Number</label>
+                    <input type="tel" class="form-control" id="phone" name="phone">
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="address" name="address">
+                </div>
+                <div class="mb-3">
+                    <label for="photo" class="form-label">Upload a Profile Picture</label>
+                    <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Education</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="degree" class="form-label">Degree</label>
+                    <input type="text" class="form-control" id="degree" name="degree" required>
+                </div>
+                <div class="mb-3">
+                    <label for="university" class="form-label">University</label>
+                    <input type="text" class="form-control" id="university" name="university" required>
+                </div>
+                <div class="mb-3">
+                    <label for="graduation_year" class="form-label">Graduation Year</label>
+                    <input type="number" class="form-control" id="graduation_year" name="graduation_year" required>
+                </div>
+            </div>
+        </div>
+
+        <!-- Work Experience Section -->
+        <div class="card mb-4" id="experience-section">
+            <div class="card-header">
+                <h5>Work Experience</h5>
+            </div>
+            <div class="card-body" id="experience-fields">
+                <!-- Initial Experience Entry -->
+                <div class="experience-entry mb-3">
+                    <label for="job_title_1" class="form-label">Job Title</label>
+                    <input type="text" class="form-control" id="job_title_1" name="job_title_1">
+                </div>
+                <div class="experience-entry mb-3">
+                    <label for="company_1" class="form-label">Company</label>
+                    <input type="text" class="form-control" id="company_1" name="company_1">
+                </div>
+                <div class="experience-entry mb-3">
+                    <label for="years_worked_1" class="form-label">Years Worked</label>
+                    <input type="text" class="form-control" id="years_worked_1" name="years_worked_1">
+                </div>
+                <hr>
+            </div>
+
+            <!-- Button to Add Another Experience (Always under experience fields) -->
+            <div class="text-center">
+                <button type="button" class="btn btn-secondary" id="add-experience">Add Another Experience</button>
+            </div>
+        </div>
+
+        <!-- Skills Section -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Skills</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="skills" class="form-label">Skills (comma-separated)</label>
+                    <input type="text" class="form-control" id="skills" name="skills">
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Generate CV</button>
+        </div>
+    </form>
+</div>
+
+<!-- Add JavaScript for dynamically adding experience columns -->
+<script>
+    document.getElementById('add-experience').addEventListener('click', function() {
+        const experienceSection = document.getElementById('experience-fields');
+        const experienceCount = experienceSection.querySelectorAll('.experience-entry').length / 3 + 1;  // Find the next entry number
+
+        // Create new experience entry fields dynamically
+        const newExperienceEntry = `
+            <div class="experience-entry mb-3">
+                <label for="job_title_${experienceCount}" class="form-label">Job Title</label>
+                <input type="text" class="form-control" id="job_title_${experienceCount}" name="job_title_${experienceCount}">
+            </div>
+            <div class="experience-entry mb-3">
+                <label for="company_${experienceCount}" class="form-label">Company</label>
+                <input type="text" class="form-control" id="company_${experienceCount}" name="company_${experienceCount}">
+            </div>
+            <div class="experience-entry mb-3">
+                <label for="years_worked_${experienceCount}" class="form-label">Years Worked</label>
+                <input type="text" class="form-control" id="years_worked_${experienceCount}" name="years_worked_${experienceCount}">
+            </div>
+            <hr>
+        `;
+
+        // Insert the new experience entry at the bottom of the experience fields
+        experienceSection.insertAdjacentHTML('beforeend', newExperienceEntry);
+    });
+</script>
+
+{% endblock %}
